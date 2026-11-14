@@ -1,9 +1,8 @@
-"""Streamlit UI: pick a scenario, run all six agents on identical data, compare decisions."""
+"""Streamlit UI: pick a scenario, run all agents on identical data, compare decisions."""
 import pandas as pd
 import streamlit as st
 
 from agents import ACTIONS, AGENT_REASONS, LearningAgent, classical_agents
-from llm_agent import run_llm_agent
 from scenarios import SCENARIOS
 
 st.set_page_config(page_title="CI/CD Failure Assistant", layout="wide")
@@ -11,20 +10,15 @@ st.title("Intelligent CI/CD Pipeline Failure Assistant")
 st.caption("Recommends the next troubleshooting step only. It never changes code or deploys.")
 
 sid = st.sidebar.selectbox("Scenario", list(SCENARIOS), format_func=lambda k: f"{k}: {SCENARIOS[k]['title']}")
-model = st.sidebar.text_input("Ollama model", "qwen3:8b")
-use_llm = st.sidebar.checkbox("Run LLM agent (needs Ollama)", True)
 s = SCENARIOS[sid]
 
 st.subheader(f"Scenario {sid}: {s['title']}")
-with st.expander("Shared scenario data (identical input for all six agents)"):
+with st.expander("Shared scenario data (identical input for all agents)"):
     st.json(s)
     st.code(s["logs"], language="text")
 
 if st.button("Run all agents", type="primary"):
     decisions = [a.decide(s) for a in classical_agents()]
-    if use_llm:
-        with st.spinner(f"Running {model} with tool calling..."):
-            decisions.append(run_llm_agent(s, model))
     st.session_state["res"] = {"sid": sid, "decisions": decisions}
 
 res = st.session_state.get("res")
@@ -51,15 +45,6 @@ for i in range(0, len(decisions), 3):
             with st.expander("Post-fix verification checklist"):
                 for c in d.checklist:
                     st.checkbox(c, key=f"{sid}-{d.agent}-{c}")
-            if d.agent.startswith("LLM"):
-                if d.extra.get("error"):
-                    st.error(d.extra["error"])
-                else:
-                    with st.expander(f"Tool calls ({len(d.extra['tool_trace'])})"):
-                        for t in d.extra["tool_trace"]:
-                            st.markdown(f"`{t['tool']}()`")
-                            st.json(t["result"])
-
 st.subheader("Comparison")
 df = pd.DataFrame([{"Agent": d.agent, "Category": d.category, "Action": d.action,
                     "Likely cause": d.cause} for d in decisions])
