@@ -1,5 +1,6 @@
 # Test Results
 
+LLM tools called in scenario A: ['get_pipeline_status', 'get_recent_change_summary', 'read_build_logs'] -> PASS
 ## Scenario A: Unit tests fail after a code change (normal)
 
 | Agent | Category | Action | Category check |
@@ -9,9 +10,11 @@
 | Goal-Based | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
 | Utility-Based | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
 | Learning | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
+| LLM (Ollama) | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
 
 Likely cause (Utility-Based): Commit a1b2c3d ('Refactor discount calculation') changed code the failing tests exercise
 
+LLM tools called in scenario B: ['get_pipeline_status', 'read_build_logs'] -> PASS
 ## Scenario B: Build blocked by dependency conflict, with a flaky test nearby (critical, mixed signals)
 
 | Agent | Category | Action | Category check |
@@ -21,9 +24,11 @@ Likely cause (Utility-Based): Commit a1b2c3d ('Refactor discount calculation') c
 | Goal-Based | DEPENDENCY_ISSUE | check_dependency_pins | PASS (expected DEPENDENCY_ISSUE) |
 | Utility-Based | DEPENDENCY_ISSUE | check_dependency_pins | PASS (expected DEPENDENCY_ISSUE) |
 | Learning | DEPENDENCY_ISSUE | check_dependency_pins | PASS (expected DEPENDENCY_ISSUE) |
+| LLM (Ollama) | DEPENDENCY_ISSUE | check_dependency_pins | PASS (expected DEPENDENCY_ISSUE) |
 
 Likely cause (Utility-Based): Requested package version is unavailable or incompatible: pandas==2.4.0 (latest on index: 2.2.3)
 
+LLM tools called in scenario C: ['get_pipeline_status', 'read_build_logs'] -> PASS
 ## Scenario C: Tests pass, deployment health checks fail (post-release)
 
 | Agent | Category | Action | Category check |
@@ -33,9 +38,11 @@ Likely cause (Utility-Based): Requested package version is unavailable or incomp
 | Goal-Based | DEPLOYMENT_HEALTH | inspect_deploy_health | PASS (expected DEPLOYMENT_HEALTH) |
 | Utility-Based | DEPLOYMENT_HEALTH | inspect_deploy_health | PASS (expected DEPLOYMENT_HEALTH) |
 | Learning | DEPLOYMENT_HEALTH | inspect_deploy_health | PASS (expected DEPLOYMENT_HEALTH) |
+| LLM (Ollama) | DEPLOYMENT_HEALTH | inspect_deploy_health | PASS (expected DEPLOYMENT_HEALTH) |
 
 Likely cause (Utility-Based): Release fails at startup in the target environment: KeyError: 'PAYMENT_API_URL' during startup
 
+LLM tools called in scenario D: ['get_pipeline_status', 'read_build_logs'] -> PASS
 ## Scenario D: Intermittent timeout in unrelated test (edge / ambiguous)
 
 | Agent | Category | Action | Category check |
@@ -45,6 +52,7 @@ Likely cause (Utility-Based): Release fails at startup in the target environment
 | Goal-Based | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
 | Utility-Based | TEST_FAILURE | rerun_failed_tests | PASS (expected TEST_FAILURE) |
 | Learning | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
+| LLM (Ollama) | TEST_FAILURE | inspect_test_failures | PASS (expected TEST_FAILURE) |
 
 Likely cause (Utility-Based): Failure is unrelated to the recent change; likely a flaky/timing-sensitive test
 
