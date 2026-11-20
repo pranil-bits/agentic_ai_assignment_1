@@ -1,6 +1,6 @@
 # Test Results
 
-LLM tools called in scenario A: ['get_pipeline_status', 'read_build_logs'] -> PASS
+LLM tools called in scenario A: ['get_pipeline_status', 'get_recent_change_summary', 'get_test_results', 'read_build_logs'] -> PASS
 ## Scenario A: Unit tests fail after a code change (normal)
 
 | Agent | Category | Action | Category check |
