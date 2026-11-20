@@ -1,6 +1,6 @@
 # Test Results
 
-LLM tools called in scenario A: ['get_pipeline_status', 'get_recent_change_summary', 'read_build_logs'] -> PASS
+LLM tools called in scenario A: ['get_pipeline_status', 'read_build_logs'] -> PASS
 ## Scenario A: Unit tests fail after a code change (normal)
 
 | Agent | Category | Action | Category check |
@@ -28,7 +28,7 @@ LLM tools called in scenario B: ['get_pipeline_status', 'read_build_logs'] -> PA
 
 Likely cause (Utility-Based): Requested package version is unavailable or incompatible: pandas==2.4.0 (latest on index: 2.2.3)
 
-LLM tools called in scenario C: ['get_pipeline_status', 'read_build_logs'] -> PASS
+LLM tools called in scenario C: ['get_dependency_info', 'get_pipeline_status', 'get_recent_change_summary', 'read_build_logs'] -> PASS
 ## Scenario C: Tests pass, deployment health checks fail (post-release)
 
 | Agent | Category | Action | Category check |
